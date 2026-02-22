@@ -1,0 +1,49 @@
+@model List<VetRandevu.Api.Models.Clinic>
+@{
+    ViewData["Title"] = "Kliniğim";
+    Layout = ViewBag.Layout ?? Layout;
+    var basePath = ViewBag.BasePath as string ?? "/clinic-admin";
+}
+
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h5 class="mb-0">Kliniğim</h5>
+        </div>
+
+        @if (Model.Count == 0)
+        {
+            <div class="muted">Henüz klinik kaydı yok. Başvuru için ana sayfadaki Klinik Başvuru bölümünü kullan.</div>
+        }
+        else
+        {
+            <div class="table-responsive mt-3">
+                <table class="table align-middle">
+                    <thead class="table-secondary">
+                        <tr>
+                            <th>Ad</th>
+                            <th>Şehir</th>
+                            <th>Telefon</th>
+                            <th>Durum</th>
+                            <th>Güncelle</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var clinic in Model)
+                        {
+                            <tr>
+                                <td>@clinic.Name</td>
+                                <td>@clinic.City</td>
+                                <td>@clinic.Phone</td>
+                                <td>@(clinic.IsApproved ? "Onaylı" : "Onay Bekliyor")</td>
+                                <td>
+                                    <a class="btn btn-link text-warning p-0" href="@($"{basePath}/clinics/edit/{clinic.Id}")">Düzenle</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

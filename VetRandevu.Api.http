@@ -1,0 +1,90 @@
+@VetRandevu.Api_HostAddress = http://localhost:5298
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2M2MyMzZkMi1jM2IxLTQ0M2ItYTJmOC1kMTc3NTA0ZDYxYjEiLCJlbWFpbCI6ImFkbWluQHZldHJhbmRldnUubG9jYWwiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjYzYzIzNmQyLWMzYjEtNDQzYi1hMmY4LWQxNzc1MDRkNjFiMSIsImh0dHA6Ly9zY2hlbWFzLnhtbHNvYXAub3JnL3dzLzIwMDUvMDUvaWRlbnRpdHkvY2xhaW1zL25hbWUiOiJhZG1pbkB2ZXRyYW5kZXZ1LmxvY2FsIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiVXNlciIsImV4cCI6MTc3MTQ1ODA3NiwiaXNzIjoiVmV0UmFuZGV2dSIsImF1ZCI6IlZldFJhbmRldnVDbGllbnRzIn0._jyP0FCbhzi5O8IBPk6UtGf1D49lWA5bpGpOhCaUWsQ
+@clinicId = 1d969373-534d-4ea3-bd3d-f9e92228e963
+@petId = d9eaa665-92ed-43da-b0b4-cc74e40828b1
+@serviceId = ea528251-4b7d-4302-a0b0-9108c7ca819f
+
+GET {{VetRandevu.Api_HostAddress}}/
+Accept: application/json
+
+###
+
+POST {{VetRandevu.Api_HostAddress}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "admin@vetrandevu.local",
+  "password": "Admin123!",
+  "fullName": "Admin User",
+  "role": "ClinicAdmin"
+}
+
+###
+
+POST {{VetRandevu.Api_HostAddress}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@vetrandevu.local",
+  "password": "Admin123!"
+}
+
+###
+
+POST {{VetRandevu.Api_HostAddress}}/clinics
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "Pati Klinik",
+  "city": "Istanbul",
+  "address": "Kadikoy",
+  "phone": "+90 212 000 00 00",
+  "description": "7/24 acil hizmet, deneyimli hekim kadrosu.",
+  "imageUrl": "https://images.unsplash.com/photo-1529778873920-4da4926a72c2",
+  "services": [
+    { "name": "Muayene", "price": 500, "durationMinutes": 30 }
+  ]
+}
+
+###
+
+POST {{VetRandevu.Api_HostAddress}}/pets
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "ownerName": "Ayse Yilmaz",
+  "name": "Pati",
+  "species": "Kedi",
+  "age": 3
+}
+
+###
+
+POST {{VetRandevu.Api_HostAddress}}/clinics/{{clinicId}}/approve
+Authorization: Bearer {{token}}
+
+###
+
+POST {{VetRandevu.Api_HostAddress}}/clinics/{{clinicId}}/slots
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "startUtc": "2026-02-20T09:00:00Z",
+  "endUtc": "2026-02-20T10:00:00Z"
+}
+
+###
+
+POST {{VetRandevu.Api_HostAddress}}/appointments
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "clinicId": "{{clinicId}}",
+  "petId": "{{petId}}",
+  "serviceId": "{{serviceId}}",
+  "startUtc": "2026-02-20T09:00:00Z"
+}

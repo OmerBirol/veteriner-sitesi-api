@@ -1,0 +1,99 @@
+@model List<VetRandevu.Api.Models.Review>
+@{
+    ViewData["Title"] = "Yorumlar";
+    var reports = ViewBag.Reports as List<VetRandevu.Api.Models.ReviewReport> ?? new List<VetRandevu.Api.Models.ReviewReport>();
+    var reviewMap = Model.ToDictionary(r => r.Id, r => r);
+}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="mb-3">Yorumlar</h5>
+        <div class="table-responsive mt-3">
+            <table class="table align-middle">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>Klinik</th>
+                        <th>Rating</th>
+                        <th>Yorum</th>
+                        <th>Tarih</th>
+                        <th>Sil</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.ClinicId</td>
+                            <td>@item.Rating</td>
+                            <td>@item.Comment</td>
+                            <td>@item.CreatedAtUtc</td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <form method="post" action="/admin/reviews/remove/@item.Id" onsubmit="return confirm('Yorum gizlensin mi?');">
+                                        <button class="btn btn-link text-warning p-0">Gizle</button>
+                                    </form>
+                                    <form method="post" action="/admin/reviews/restore/@item.Id" onsubmit="return confirm('Yorum geri gelsin mi?');">
+                                        <button class="btn btn-link text-success p-0">Geri Al</button>
+                                    </form>
+                                    <form method="post" action="/admin/reviews/delete/@item.Id" onsubmit="return confirm('Silinsin mi?');">
+                                        <button class="btn btn-link text-danger p-0"><i class="bi bi-trash-fill"></i></button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-body">
+        <h5 class="mb-3">Şikayetler</h5>
+        <div class="table-responsive mt-3">
+            <table class="table align-middle">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>Yorum</th>
+                        <th>Neden</th>
+                        <th>Durum</th>
+                        <th>Tarih</th>
+                        <th>İşlem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (reports.Count == 0)
+                    {
+                        <tr>
+                            <td colspan="5">Şikayet yok.</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var report in reports)
+                        {
+                            var review = reviewMap.ContainsKey(report.ReviewId) ? reviewMap[report.ReviewId] : null;
+                            <tr>
+                                <td>@(review?.Comment ?? report.ReviewId.ToString())</td>
+                                <td>@report.Reason</td>
+                                <td>@report.Status</td>
+                                <td>@report.CreatedAtUtc</td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <form method="post" action="/admin/reviews/remove/@report.ReviewId" onsubmit="return confirm('Yorum gizlensin mi?');">
+                                            <button class="btn btn-link text-warning p-0">Gizle</button>
+                                        </form>
+                                        <form method="post" action="/admin/reviews/reports/@report.Id/resolve" onsubmit="return confirm('Şikayet çözülsün mü?');">
+                                            <button class="btn btn-link text-success p-0">Kapat</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,41 @@
+@model List<VetRandevu.Api.Models.Pet>
+@{
+    ViewData["Title"] = "Evcil Hayvanlar";
+}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="mb-3">Evcil Hayvanlar</h5>
+        <div class="table-responsive mt-3">
+            <table class="table align-middle">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>Sahip</th>
+                        <th>Ad</th>
+                        <th>Tür</th>
+                        <th>Yaş</th>
+                        <th>Düzenle</th>
+                        <th>Sil</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.OwnerName</td>
+                            <td>@item.Name</td>
+                            <td>@item.Species</td>
+                            <td>@item.Age</td>
+                            <td><a class="text-warning" href="/admin/pets/edit/@item.Id"><i class="bi bi-pencil-fill"></i></a></td>
+                            <td>
+                                <form method="post" action="/admin/pets/delete/@item.Id" onsubmit="return confirm('Silinsin mi?');">
+                                    <button class="btn btn-link text-danger p-0"><i class="bi bi-trash-fill"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

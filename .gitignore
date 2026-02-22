@@ -1,0 +1,15 @@
+bin/
+obj/
+.vs/
+.vscode/
+*.user
+*.suo
+*.cache
+*.log
+
+# Local settings with secrets
+appsettings.json
+appsettings.Development.json
+
+# Node
+node_modules/

@@ -1,0 +1,57 @@
+@model List<VetRandevu.Api.Models.Appointment>
+@{
+    ViewData["Title"] = "Günlük Ajanda";
+    var clinics = ViewBag.Clinics as Dictionary<Guid, string> ?? new Dictionary<Guid, string>();
+    var pets = ViewBag.Pets as Dictionary<Guid, string> ?? new Dictionary<Guid, string>();
+    var services = ViewBag.Services as Dictionary<Guid, string> ?? new Dictionary<Guid, string>();
+    Layout = ViewBag.Layout ?? Layout;
+    var basePath = ViewBag.BasePath as string ?? "/clinic-admin";
+    var grouped = Model
+        .OrderBy(a => a.StartUtc)
+        .GroupBy(a => a.StartUtc.Date)
+        .ToList();
+}
+
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h5 class="mb-0">Günlük Ajanda</h5>
+            <a class="btn btn-secondary" href="@($"{basePath}/appointments")">Listeye Dön</a>
+        </div>
+
+        @if (grouped.Count == 0)
+        {
+            <div class="muted">Ajanda boş.</div>
+        }
+        else
+        {
+            foreach (var dayGroup in grouped)
+            {
+                <h6 class="mt-4">@dayGroup.Key.ToString("dd.MM.yyyy")</h6>
+                <div class="table-responsive mt-2">
+                    <table class="table align-middle">
+                        <thead class="table-secondary">
+                            <tr>
+                                <th>Saat</th>
+                                <th>Pet</th>
+                                <th>Hizmet</th>
+                                <th>Durum</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in dayGroup)
+                            {
+                                <tr>
+                                    <td>@item.StartUtc.ToLocalTime().ToString("HH:mm")</td>
+                                    <td>@(pets.TryGetValue(item.PetId, out var petName) ? petName : item.PetId.ToString())</td>
+                                    <td>@(services.TryGetValue(item.ServiceId, out var serviceName) ? serviceName : item.ServiceId.ToString())</td>
+                                    <td>@item.Status</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        }
+    </div>
+</div>

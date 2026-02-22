@@ -1,0 +1,52 @@
+@model List<VetRandevu.Api.Models.Service>
+@{
+    ViewData["Title"] = "Hizmetler";
+    var clinics = ViewBag.Clinics as Dictionary<Guid, string> ?? new Dictionary<Guid, string>();
+    var basePath = ViewBag.BasePath as string ?? "/admin";
+    Layout = ViewBag.Layout ?? Layout;
+    var noClinic = ViewBag.NoClinic as bool? ?? false;
+}
+
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex align-items-center">
+            <h5 class="mb-0">Hizmetler</h5>
+            <a class="btn btn-primary ms-auto" href="@($"{basePath}/services/create")">Yeni Hizmet</a>
+        </div>
+        @if (noClinic)
+        {
+            <div class="muted">Bu hesapla eşleşen klinik bulunamadı. Klinik sahibi atanmalı.</div>
+        }
+        <div class="table-responsive mt-3">
+            <table class="table align-middle">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>Ad</th>
+                        <th>Klinik</th>
+                        <th>Ücret</th>
+                        <th>Süre (dk)</th>
+                        <th>Düzenle</th>
+                        <th>Sil</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var service in Model)
+                    {
+                        <tr>
+                            <td>@service.Name</td>
+                            <td>@(clinics.TryGetValue(service.ClinicId, out var clinicName) ? clinicName : service.ClinicId.ToString())</td>
+                            <td>@service.Price</td>
+                            <td>@service.DurationMinutes</td>
+                            <td><a class="text-warning" href="@($"{basePath}/services/edit/{service.Id}")"><i class="bi bi-pencil-fill"></i></a></td>
+                            <td>
+                                <form method="post" action="@($"{basePath}/services/delete/{service.Id}")" onsubmit="return confirm('Silinsin mi?');">
+                                    <button class="btn btn-link text-danger p-0"><i class="bi bi-trash-fill"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

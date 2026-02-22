@@ -1,0 +1,50 @@
+@model List<VetRandevu.Api.Models.Appointment>
+@{
+    ViewData["Title"] = "Randevular";
+    var clinics = ViewBag.Clinics as Dictionary<Guid, string> ?? new Dictionary<Guid, string>();
+    var pets = ViewBag.Pets as Dictionary<Guid, string> ?? new Dictionary<Guid, string>();
+    var services = ViewBag.Services as Dictionary<Guid, string> ?? new Dictionary<Guid, string>();
+    Layout = ViewBag.Layout ?? Layout;
+    var basePath = ViewBag.BasePath as string ?? "/admin";
+}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="mb-3">Randevular</h5>
+        <div class="table-responsive mt-3">
+            <table class="table align-middle">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>Başlangıç</th>
+                        <th>Bitiş</th>
+                        <th>Klinik</th>
+                        <th>Pet</th>
+                        <th>Hizmet</th>
+                        <th>Durum</th>
+                        <th>Düzenle</th>
+                        <th>Sil</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.StartUtc</td>
+                            <td>@item.EndUtc</td>
+                            <td>@(clinics.TryGetValue(item.ClinicId, out var clinicName) ? clinicName : item.ClinicId.ToString())</td>
+                            <td>@(pets.TryGetValue(item.PetId, out var petName) ? petName : item.PetId.ToString())</td>
+                            <td>@(services.TryGetValue(item.ServiceId, out var serviceName) ? serviceName : item.ServiceId.ToString())</td>
+                            <td>@item.Status</td>
+                            <td><a class="text-warning" href="@($"{basePath}/appointments/edit/{item.Id}")"><i class="bi bi-pencil-fill"></i></a></td>
+                            <td>
+                                <form method="post" action="@($"{basePath}/appointments/delete/{item.Id}")" onsubmit="return confirm('Silinsin mi?');">
+                                    <button class="btn btn-link text-danger p-0"><i class="bi bi-trash-fill"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

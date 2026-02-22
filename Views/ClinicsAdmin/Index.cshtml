@@ -1,0 +1,56 @@
+@model List<VetRandevu.Api.Models.Clinic>
+@{
+    ViewData["Title"] = "Klinikler";
+    var owners = ViewBag.Owners as Dictionary<string, string> ?? new Dictionary<string, string>();
+}
+
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex align-items-center">
+            <h5 class="mb-0">Klinikler</h5>
+            <a class="btn btn-primary ms-auto" href="/admin/clinics/create">Yeni Klinik</a>
+        </div>
+        <div class="table-responsive mt-3">
+            <table class="table align-middle">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>Ad</th>
+                        <th>Şehir</th>
+                        <th>Telefon</th>
+                        <th>Sahip</th>
+                        <th>Onaylı</th>
+                        <th>Onayla</th>
+                        <th>Düzenle</th>
+                        <th>Sil</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var clinic in Model)
+                    {
+                        <tr>
+                            <td>@clinic.Name</td>
+                            <td>@clinic.City</td>
+                            <td>@clinic.Phone</td>
+                            <td>@(string.IsNullOrWhiteSpace(clinic.OwnerUserId) ? "-" : (owners.TryGetValue(clinic.OwnerUserId, out var owner) ? owner : clinic.OwnerUserId))</td>
+                            <td>@(clinic.IsApproved ? "Evet" : "Hayır")</td>
+                            <td>
+                                @if (!clinic.IsApproved)
+                                {
+                                    <form method="post" action="/admin/clinics/approve/@clinic.Id" onsubmit="return confirm('Klinik onaylansın mı?');">
+                                        <button class="btn btn-link text-success p-0">Onayla</button>
+                                    </form>
+                                }
+                            </td>
+                            <td><a class="text-warning" href="/admin/clinics/edit/@clinic.Id"><i class="bi bi-pencil-fill"></i></a></td>
+                            <td>
+                                <form method="post" action="/admin/clinics/delete/@clinic.Id" onsubmit="return confirm('Silinsin mi?');">
+                                    <button class="btn btn-link text-danger p-0"><i class="bi bi-trash-fill"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

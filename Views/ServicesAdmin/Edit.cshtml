@@ -1,0 +1,41 @@
+@model VetRandevu.Api.Models.Service
+@{
+    ViewData["Title"] = "Hizmet Düzenle";
+    var clinics = ViewBag.Clinics as List<VetRandevu.Api.Models.Clinic>;
+    var basePath = ViewBag.BasePath as string ?? "/admin";
+    Layout = ViewBag.Layout ?? Layout;
+}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="mb-3">Hizmet Düzenle</h5>
+        <form method="post">
+            <div class="mb-3">
+                <label class="form-label">Klinik</label>
+                <select class="form-select" asp-for="ClinicId">
+                    @if (clinics != null)
+                    {
+                        foreach (var clinic in clinics)
+                        {
+                            <option value="@clinic.Id">@clinic.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Ad</label>
+                <input asp-for="Name" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Ücret</label>
+                <input asp-for="Price" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Süre (dk)</label>
+                <input asp-for="DurationMinutes" class="form-control" />
+            </div>
+            <button class="btn btn-primary">Güncelle</button>
+            <a class="btn btn-secondary" href="@($"{basePath}/services")">İptal</a>
+        </form>
+    </div>
+</div>

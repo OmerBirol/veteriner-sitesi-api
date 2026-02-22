@@ -1,0 +1,47 @@
+@model List<VetRandevu.Api.Models.ApplicationUser>
+@{
+    ViewData["Title"] = "Kullanıcı Yetkileri";
+    var roleMap = ViewBag.RoleMap as Dictionary<string, IList<string>> ?? new Dictionary<string, IList<string>>();
+}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="mb-3">Kullanıcı Yetkileri</h5>
+        <div class="table-responsive mt-3">
+            <table class="table align-middle">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>Email</th>
+                        <th>Ad Soyad</th>
+                        <th>Rol</th>
+                        <th>Güncelle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        var roles = roleMap.ContainsKey(user.Id) ? roleMap[user.Id] : new List<string>();
+                        var currentRole = roles.FirstOrDefault() ?? "User";
+                        <tr>
+                            <td>@user.Email</td>
+                            <td>@(string.IsNullOrWhiteSpace(user.FullName) ? "-" : user.FullName)</td>
+                            <td>@string.Join(", ", roles)</td>
+                            <td>
+                                <form method="post" action="/admin/users/role/@user.Id">
+                                    <div class="d-flex gap-2 align-items-center">
+                                        <select class="form-select" name="role">
+                                            <option value="User" selected="@(currentRole == "User")">User</option>
+                                            <option value="ClinicAdmin" selected="@(currentRole == "ClinicAdmin")">ClinicAdmin</option>
+                                            <option value="Admin" selected="@(currentRole == "Admin")">Admin</option>
+                                        </select>
+                                        <button class="btn btn-primary">Kaydet</button>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

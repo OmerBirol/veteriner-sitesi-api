@@ -1,0 +1,29 @@
+@model VetRandevu.Api.Models.Appointment
+@{
+    ViewData["Title"] = "Randevu Durum";
+    var statuses = ViewBag.Statuses as Array;
+    Layout = ViewBag.Layout ?? Layout;
+    var basePath = ViewBag.BasePath as string ?? "/admin";
+}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="mb-3">Randevu Durumu</h5>
+        <form method="post">
+            <div class="mb-3">
+                <label class="form-label">Durum</label>
+                <select class="form-select" asp-for="Status">
+                    @if (statuses != null)
+                    {
+                        foreach (var status in statuses)
+                        {
+                            <option value="@status">@status</option>
+                        }
+                    }
+                </select>
+            </div>
+            <button class="btn btn-primary">Güncelle</button>
+            <a class="btn btn-secondary" href="@($"{basePath}/appointments")">İptal</a>
+        </form>
+    </div>
+</div>

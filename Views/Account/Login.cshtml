@@ -1,0 +1,47 @@
+@model VetRandevu.Api.Models.LoginViewModel
+@{
+    Layout = null;
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="/snacked/ltr/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/snacked/ltr/assets/css/style.css" rel="stylesheet" />
+    <title>VetRandevu - Giriş</title>
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="mb-3">Giriş Yap</h5>
+                        <form method="post">
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input asp-for="Email" class="form-control" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Şifre</label>
+                                <input asp-for="Password" class="form-control" type="password" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                            <div class="text-danger mb-3">
+                                @Html.ValidationSummary()
+                            </div>
+                            <button class="btn btn-primary w-100">Giriş Yap</button>
+                        </form>
+                        <div class="mt-3">
+                            <a href="/account/register">Kayıt ol</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

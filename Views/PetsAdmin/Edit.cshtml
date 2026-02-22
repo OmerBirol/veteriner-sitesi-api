@@ -1,0 +1,30 @@
+@model VetRandevu.Api.Models.Pet
+@{
+    ViewData["Title"] = "Evcil Düzenle";
+}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="mb-3">Evcil Düzenle</h5>
+        <form method="post">
+            <div class="mb-3">
+                <label class="form-label">Sahip Adı</label>
+                <input asp-for="OwnerName" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Ad</label>
+                <input asp-for="Name" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Tür</label>
+                <input asp-for="Species" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Yaş</label>
+                <input asp-for="Age" class="form-control" />
+            </div>
+            <button class="btn btn-primary">Güncelle</button>
+            <a class="btn btn-secondary" href="/admin/pets">İptal</a>
+        </form>
+    </div>
+</div>

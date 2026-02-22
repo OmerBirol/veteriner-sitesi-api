@@ -1,0 +1,36 @@
+@model VetRandevu.Api.Models.Pet
+@{
+    ViewData["Title"] = "Hızlı Hasta Ekle";
+    Layout = ViewBag.Layout ?? Layout;
+    var basePath = ViewBag.BasePath as string ?? "/clinic-admin";
+}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="mb-3">Hızlı Hasta Ekle</h5>
+        <form method="post">
+            <div class="mb-3">
+                <label class="form-label">Sahip Ad Soyad</label>
+                <input class="form-control" asp-for="OwnerName" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Sahip Email</label>
+                <input class="form-control" asp-for="OwnerEmail" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Pet Adı</label>
+                <input class="form-control" asp-for="Name" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Tür</label>
+                <input class="form-control" asp-for="Species" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Yaş</label>
+                <input class="form-control" asp-for="Age" type="number" />
+            </div>
+            <button class="btn btn-primary">Kaydet</button>
+            <a class="btn btn-secondary" href="@($"{basePath}/pets")">İptal</a>
+        </form>
+    </div>
+</div>

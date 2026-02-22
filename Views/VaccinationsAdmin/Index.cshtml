@@ -1,0 +1,44 @@
+@model List<VetRandevu.Api.Models.VaccinationRecord>
+@{
+    ViewData["Title"] = "Aşı Kartları";
+    var clinics = ViewBag.Clinics as Dictionary<Guid, string> ?? new Dictionary<Guid, string>();
+    var pets = ViewBag.Pets as Dictionary<Guid, string> ?? new Dictionary<Guid, string>();
+    Layout = ViewBag.Layout ?? Layout;
+    var basePath = ViewBag.BasePath as string ?? "/admin";
+}
+
+<div class="card">
+    <div class="card-body">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <h5 class="mb-0">Aşı Kartları</h5>
+            <a class="btn btn-primary" href="@($"{basePath}/vaccinations/create")">Yeni Kayıt</a>
+        </div>
+        <div class="table-responsive mt-3">
+            <table class="table align-middle">
+                <thead class="table-secondary">
+                    <tr>
+                        <th>Pet</th>
+                        <th>Klinik</th>
+                        <th>Aşı</th>
+                        <th>Uygulama Tarihi</th>
+                        <th>Sonraki Tarih</th>
+                        <th>Not</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@(pets.TryGetValue(item.PetId, out var petName) ? petName : item.PetId.ToString())</td>
+                            <td>@(clinics.TryGetValue(item.ClinicId, out var clinicName) ? clinicName : item.ClinicId.ToString())</td>
+                            <td>@item.VaccineName</td>
+                            <td>@item.AdministeredUtc</td>
+                            <td>@(item.NextDueUtc.HasValue ? item.NextDueUtc.Value.ToString() : "-")</td>
+                            <td>@(string.IsNullOrWhiteSpace(item.Notes) ? "-" : item.Notes)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

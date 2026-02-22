@@ -1,0 +1,61 @@
+@model VetRandevu.Api.Models.VaccinationRecord
+@{
+    ViewData["Title"] = "Aşı Kartı Ekle";
+    var clinics = ViewBag.Clinics as List<VetRandevu.Api.Models.Clinic> ?? new List<VetRandevu.Api.Models.Clinic>();
+    var pets = ViewBag.Pets as List<VetRandevu.Api.Models.Pet> ?? new List<VetRandevu.Api.Models.Pet>();
+    Layout = ViewBag.Layout ?? Layout;
+    var basePath = ViewBag.BasePath as string ?? "/admin";
+    var clinicName = ViewBag.ClinicName as string;
+}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="mb-3">Aşı Kartı Ekle</h5>
+        <form method="post">
+            <div class="mb-3">
+                <label class="form-label">Klinik</label>
+                @if (clinics.Count <= 1)
+                {
+                    <input class="form-control" value="@(string.IsNullOrWhiteSpace(clinicName) ? (clinics.FirstOrDefault()?.Name ?? "-") : clinicName)" disabled />
+                    <input type="hidden" asp-for="ClinicId" />
+                }
+                else
+                {
+                    <select class="form-select" asp-for="ClinicId">
+                        @foreach (var clinic in clinics)
+                        {
+                            <option value="@clinic.Id">@clinic.Name</option>
+                        }
+                    </select>
+                }
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Pet</label>
+                <select class="form-select" asp-for="PetId" required>
+                    @foreach (var pet in pets)
+                    {
+                        <option value="@pet.Id">@pet.Name (@pet.OwnerName)</option>
+                    }
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Aşı Adı</label>
+                <input class="form-control" asp-for="VaccineName" required />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Uygulama Tarihi (UTC)</label>
+                <input class="form-control" type="datetime-local" asp-for="AdministeredUtc" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Sonraki Tarih (UTC)</label>
+                <input class="form-control" type="datetime-local" asp-for="NextDueUtc" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Not</label>
+                <textarea class="form-control" asp-for="Notes"></textarea>
+            </div>
+            <button class="btn btn-primary">Kaydet</button>
+            <a class="btn btn-secondary" href="@($"{basePath}/vaccinations")">İptal</a>
+        </form>
+    </div>
+</div>

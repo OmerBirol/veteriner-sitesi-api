@@ -1,0 +1,48 @@
+@model VetRandevu.Api.Models.Clinic
+@{
+    ViewData["Title"] = "Klinik Bilgileri";
+    Layout = ViewBag.Layout ?? Layout;
+    var basePath = ViewBag.BasePath as string ?? "/clinic-admin";
+}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="mb-3">Klinik Bilgilerini Güncelle</h5>
+        <form method="post">
+            <div class="mb-3">
+                <label class="form-label">Ad</label>
+                <input asp-for="Name" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Şehir</label>
+                <input asp-for="City" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Adres</label>
+                <input asp-for="Address" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Telefon</label>
+                <input asp-for="Phone" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Açıklama</label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Görsel URL</label>
+                <input asp-for="ImageUrl" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Latitude</label>
+                <input asp-for="Latitude" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Longitude</label>
+                <input asp-for="Longitude" class="form-control" />
+            </div>
+            <button class="btn btn-primary">Kaydet</button>
+            <a class="btn btn-secondary" href="@($"{basePath}/clinics")">İptal</a>
+        </form>
+    </div>
+</div>
